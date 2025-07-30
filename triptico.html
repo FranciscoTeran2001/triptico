@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tráfico ZERO - Sistema de Semáforos Inteligentes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .triptico-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .triptico-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444, #8b5cf6, #06b6d4);
+        }
+
+        .triptico-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            min-height: 90vh;
+        }
+
+        /* PANEL 1 - MISIÓN (Azul) */
+        .panel-mision {
+            background: linear-gradient(135deg, #02081a 0%, #04317a 100%);
+            color: white;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-mision::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            border: 3px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: rotate 40s linear infinite;
+        }
+
+        .panel-mision::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .mision-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #dbeafe;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .mision-text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* PANEL 2 - IMAGEN PRINCIPAL Y VISIÓN (Blanco) */
+        .panel-imagen-vision {
+            background: linear-gradient(135deg, #3760b8 0%, #9da1a5 100%);
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
+        .main-traffic-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .main-traffic-image2 img {
+            width: 60%;
+            height: 60%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .vision-section {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .vision-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #dbeafe;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            text-align: right;
+            /* Alinea el texto a la izquierda */
+        }
+
+
+        .vision-text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 2;
+            text-align: right;
+        }
+
+        /* PANEL 3 - MUNDO SIN TRÁFICO Y FOTOS (Azul claro) */
+        .panel-mundo-trafico {
+            background: linear-gradient(135deg, #ffffff 0%, #bfdbfe 100%);
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mundo-sin-trafico {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .traffic-photos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 2rem;
+        }
+
+        .traffic-photo {
+
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+            border: 3px solid white;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .traffic-photo:nth-child(1) {
+            transform: rotate(3deg);
+        }
+
+        .traffic-photo:nth-child(2) {
+            transform: rotate(-2deg);
+        }
+
+        .traffic-photo:nth-child(3) {
+            transform: rotate(2deg);
+        }
+
+        .traffic-photo:hover {
+            transform: scale(1.05) rotate(0deg);
+        }
+
+        .traffic-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .traffic-photo2 {
+
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .traffic-photo2:nth-child(1) {
+            transform: rotate(5deg);
+        }
+
+        .traffic-photo2:nth-child(2) {
+            transform: rotate(-5deg);
+        }
+
+        .traffic-photo2:nth-child(3) {
+            transform: rotate(2deg);
+        }
+
+        .traffic-photo2:hover {
+            transform: scale(1.05) rotate(0deg);
+        }
+
+        .traffic-photo2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* PANEL 4 - LOGO Y TAGLINE (Negro) */
+        .panel-logo {
+            background: linear-gradient(135deg, #041233 0%, #1e293b 100%);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-logo::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 140%;
+            height: 140%;
+            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo-trafico {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .traffic-light {
+            width: 45px;
+            height: 90px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid #4a5568;
+        }
+
+        .light {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin: 8px auto;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .red {
+            background: radial-gradient(circle, #ef4444, #dc2626);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .yellow {
+            background: radial-gradient(circle, #f59e0b, #d97706);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .green {
+            background: radial-gradient(circle, #10b981, #059669);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);
+            }
+
+            50% {
+                opacity: 0.7;
+                box-shadow: 0 0 25px rgba(16, 185, 129, 1);
+            }
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* PANEL 5 - PROBLEMA Y QUIENES SOMOS (Gris oscuro) */
+        .panel-problema {
+            background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+            color: white;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title-problema {
+            font-size: 4rem;
+            /* Aumenta el tamaño de la letra */
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            /* Centra el texto */
+        }
+
+
+        .section-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-text-problema {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+            margin-top: 1rem;
+            /* ✅ más espacio arriba */
+            margin-bottom: 1.5rem;
+
+            max-width: 400px;
+            /* ✅ limita el ancho */
+            margin-left: auto;
+            /* ✅ centra horizontalmente */
+            margin-right: auto;
+        }
+
+
+
+        .semaforo-image-container {
+            width: 100px;
+            height: 130px;
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+            overflow: hidden;
+        }
+
+        .semaforo-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        /* PANEL 6 - IDEA DE NEGOCIO E INTEGRANTES (Azul oscuro) */
+        .panel-negocio {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .caracteristicas {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .caracteristicas li {
+            margin: 0.6rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .caracteristicas li::before {
+            content: '▪';
+            color: #60a5fa;
+            position: absolute;
+            left: 0;
+            font-size: 1rem;
+        }
+
+        .integrantes-section {
+            margin-top: 2rem;
+        }
+
+        .integrantes-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0141a1;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 20, 73, 0.3);
+        }
+
+        .integrante {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+            color: #000000;
+            font-weight: 500;
+            padding: 0.4rem 0.8rem;
+            background: rgba(47, 70, 143, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid #17249e;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .triptico-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .triptico-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, auto);
+            }
+
+            .panel-mision,
+            .panel-imagen-vision,
+            .panel-mundo-trafico,
+            .panel-logo,
+            .panel-problema,
+            .panel-negocio {
+                padding: 2rem;
+                min-height: auto;
+            }
+
+            .mision-title {
+                font-size: 2rem;
+            }
+
+            .mundo-sin-trafico {
+                font-size: 1.8rem;
+            }
+
+            .traffic-photos-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .panel-mision,
+            .panel-imagen-vision,
+            .panel-mundo-trafico,
+            .panel-logo,
+            .panel-problema,
+            .panel-negocio {
+                padding: 1.5rem;
+            }
+
+            .main-traffic-image {
+                height: 150px;
+            }
+
+            .traffic-photo {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="triptico-container">
+        <div class="triptico-grid">
+            <!-- PANEL 4 - LOGO Y TAGLINE -->
+            <div class="panel-logo">
+                <div class="main-traffic-image">
+                    <img src="logo.jpg" alt="Intersección con tráfico en Quito" />
+                </div>
+                <p class="tagline">Menos tráfico, gracias a nuestros semáforos adaptativos</p>
+
+
+                <div class="traffic-photos-grid">
+                    <div class="traffic-photo">
+                        <img src="trafico_1.jpg" alt="Tráfico urbano" />
+                    </div>
+                    <div class="traffic-photo">
+                        <img src="trafico_2.jpg" alt="Congestión vehicular" />
+                    </div>
+                    <div class="traffic-photo">
+                        <img src="trafico_3.jpg" alt="Intersección" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 3 - MUNDO SIN TRÁFICO Y FOTOS -->
+            <div class="panel-mundo-trafico">
+                <div class="main-traffic-image">
+                    <img src="trafico_4.jpg" alt="Intersección con tráfico en Quito" />
+                </div>
+                <h1 class="mundo-sin-trafico">"Un mundo sin tráfico"</h1>
+                <div class="integrantes-section">
+                    <h3 class="integrantes-title">Integrantes</h3>
+                    <div class="integrante">Campaña Josue</div>
+                    <div class="integrante">Landeta Esteban</div>
+                    <div class="integrante">Narvaez Paul</div>
+                    <div class="integrante">Terán Francisco</div>
+                    <div class="integrante">Velastegui Mateo</div>
+                </div>
+
+            </div>
+
+            <!-- PANEL 1 - MISIÓN -->
+            <div class="panel-mision">
+                <h2 class="mision-title">Misión</h2>
+                <p class="mision-text">
+                    Empresa ecuatoriana de base tecnológica dedicada al diseño, instalación y operación de semáforos
+                    inteligentes autónomos, que utilizan visión artificial para mejorar la eficiencia del tránsito
+                    urbano.
+                </p>
+
+
+
+                <div class="vision-section">
+                    <h2 class="vision-title">Visión</h2>
+                    <p class="vision-text">
+                        Tráfico ZERO será la plataforma líder en sistemas de semáforos inteligentes en Ecuador, operando
+                        más de 5 000 intersecciones a nivel nacional y contribuyendo con la reducción de 50 000
+                        toneladas anuales de CO₂, mediante soluciones tecnológicas accesibles y adaptadas a la realidad
+                        urbana del país.
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- PANEL 5 - PROBLEMA Y QUIENES SOMOS -->
+            <div class="panel-problema">
+                <h3 class="section-title-problema">Problema</h3>
+                <p class="section-text-problema">
+                    En ciudades como Quito, cada ciudadano pierde en promedio más de 140 horas al año atrapado en el
+                    tráfico, lo que genera pérdidas económicas significativas y una alta carga de emisiones
+                    contaminantes. A pesar de que el Municipio de Quito ha avanzado con más de 700 intersecciones
+                    centralizadas, aproximadamente 328 intersecciones siguen operando con ciclos fijos, sin capacidad de
+                    adaptarse al flujo real de vehículos.
+                </p>
+
+
+ <div class="traffic-photos-grid">
+                    <div class="traffic-photo2">
+                        <img src="semaforo1.png" alt="Tráfico urbano" />
+                    </div>
+                    <div class="traffic-photo2">
+                        <img src="semaforo2.png" alt="Congestión vehicular" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 6 - IDEA DE NEGOCIO E INTEGRANTES -->
+            <div class="panel-negocio">
+                <div class="traffic-photos-grid">
+                    <div class="traffic-photo2">
+                        <img src="negocio1.png" alt="Tráfico urbano" />
+                    </div>
+                    <div class="traffic-photo2">
+                        <img src="negocio2.jpg" alt="Congestión vehicular" />
+                    </div>
+
+                    <p>
+
+                    </p>
+                </div>
+                <h3 class="section-title">Idea de Negocio</h3>
+                <p class="section-text">
+                    Ofrecer un kit de semáforo inteligente bajo suscripción anual por intersección, el cual incluye la
+                    instalación del sistema y mantenimiento. Inicialmente nos enfocaremos en municipios de Ecuador con
+                    alta congestión y visión hacia ciudades inteligentes, como Quito, Cuenca y Ambato.
+                </p>
+
+                <p class="section-text">
+                    Las características diferenciales del proyecto son:
+                </p>
+                <ul class="caracteristicas">
+                    <li>Tecnología propia de visión artificial embarcada.</li>
+                    <li>Costo accesible frente a soluciones tradicionales ITS.</li>
+                    <li>Modelo plug-and-play para semáforos ya existentes.</li>
+                    <li>Impacto medible: reducción de tiempo de viaje y emisiones</li>
+                </ul>
+
+
+            </div>
+            <!-- PANEL 2 - IMAGEN PRINCIPAL Y VISIÓN -->
+            <div class="panel-imagen-vision">
+
+                  <h3 class="section-title-problema">Quienes somos:</h3>
+                <p class="section-text-problema">
+                     Tráfico ZERO es un emprendimiento tecnológico orientado a mejorar la movilidad urbana mediante la
+                    implementación de semáforos inteligentes autónomos, que utilizan cámaras y procesamiento local con
+                    visión artificial para ajustar los ciclos semafóricos en función del flujo vehicular en tiempo real.
+                </p>
+              <div class="main-traffic-image2">
+                    <img src="semaforo3.png" alt="Intersección con tráfico en Quito" />
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</body>
+
+</html>
