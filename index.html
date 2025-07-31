@@ -119,7 +119,7 @@
         .panel-imagen-vision {
             background: linear-gradient(135deg, #3760b8 0%, #9da1a5 100%);
             padding: 2.5rem;
-            text-align: center;
+            text-align: justify;
             position: relative;
             overflow: hidden;
         }
@@ -244,7 +244,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.4rem;
             color: #6b7280;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -422,24 +422,16 @@
         }
 
         .section-text-problema {
-            font-size: 1.5rem;
-            line-height: 1.5;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+            line-height: 1.6;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-
-            margin-top: 1rem;
-            /* ✅ más espacio arriba */
-            margin-bottom: 1.5rem;
-
-            max-width: 400px;
-            /* ✅ limita el ancho */
-            margin-left: auto;
-            /* ✅ centra horizontalmente */
-            margin-right: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 2;
         }
 
 
@@ -653,17 +645,26 @@
 
             <!-- PANEL 5 - PROBLEMA Y QUIENES SOMOS -->
             <div class="panel-problema">
-                <h3 class="section-title-problema">Problema</h3>
-                <p class="section-text-problema">
-                    En ciudades como Quito, cada ciudadano pierde en promedio más de 140 horas al año atrapado en el
-                    tráfico, lo que genera pérdidas económicas significativas y una alta carga de emisiones
-                    contaminantes. A pesar de que el Municipio de Quito ha avanzado con más de 700 intersecciones
-                    centralizadas, aproximadamente 328 intersecciones siguen operando con ciclos fijos, sin capacidad de
-                    adaptarse al flujo real de vehículos.
-                </p>
+                <h2 class="mision-title">Clientes:</h2>
+                <ul class="caracteristicas">
+                    <li>Agencia Metropolitana de Quito</li>
+                    <li>Municipio de Quito</li>
+                    <li>Zonas Industriales</li>
+                    <li> Centros Comerciales</li>
+                </ul>
 
 
- <div class="traffic-photos-grid">
+
+                <div class="vision-section">
+                    <h2 class="vision-title">Propuesta de Valor</h2>
+                    <p class="section-text-problema">
+                        Tráfico ZERO será la plataforma líder en sistemas de semáforos inteligentes en Ecuador, operando
+                        más de 5 000 intersecciones a nivel nacional y contribuyendo con la reducción de 50 000
+                        toneladas anuales de CO₂, mediante soluciones tecnológicas accesibles y adaptadas a la realidad
+                        urbana del país.
+                    </p>
+                </div>
+                <div class="traffic-photos-grid">
                     <div class="traffic-photo2">
                         <img src="semaforo1.png" alt="Tráfico urbano" />
                     </div>
@@ -709,24 +710,46 @@
             <!-- PANEL 2 - IMAGEN PRINCIPAL Y VISIÓN -->
             <div class="panel-imagen-vision">
 
-                  <h3 class="section-title-problema">Quienes somos:</h3>
-                <p class="section-text-problema">
-                     Tráfico ZERO es un emprendimiento tecnológico orientado a mejorar la movilidad urbana mediante la
-                    implementación de semáforos inteligentes autónomos, que utilizan cámaras y procesamiento local con
-                    visión artificial para ajustar los ciclos semafóricos en función del flujo vehicular en tiempo real.
-                </p>
-              <div class="main-traffic-image2">
+                <h3 class="section-title-problema">Problema:</h3>
+                <ul class="caracteristicas">
+                    <li>En ciudades como Quito, cada ciudadano
+                        pierde en promedio más de 140 horas al
+                        año atrapado en el tráfico, lo que genera
+                        pérdidas económicas significativas y una
+                        alta carga de emisiones contaminantes.</li>
+                </ul>
+                <h3 class="section-title-problema">Etapa:</h3>
+                <ul class="caracteristicas">
+                    <li> Prueba piloto de 10 semáforos en
+                        intersecciones con flujo vehicular
+                        medio.</li>
+                    <li> Implementación en intersecciones con
+                        alta carga vehicular.</li>
+                    <li>Expansión a otras ciudades de Ecuador.</li>
+                </ul>
+                   <h3 class="section-title-problema">Inversión y Capital:</h3>
+                <ul class="caracteristicas">
+                    <li> Capital Semilla: $5000</li>
+                    <li> Inversión: $20.000</li>
+                </ul>
+
+                 
+                <div class="main-traffic-image2">
                     <img src="semaforo3.png" alt="Intersección con tráfico en Quito" />
                 </div>
             </div>
 
-
-
-
-
-
-
         </div>
+
+
+
+
+
+
+
+
+
+    </div>
     </div>
 </body>
 
